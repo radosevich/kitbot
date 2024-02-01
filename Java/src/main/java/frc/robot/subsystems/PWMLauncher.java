@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.LauncherConstants.*;
+import static frc.robot.Constants.IntakeConstants.*;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,7 +33,7 @@ public class PWMLauncher extends SubsystemBase {
     return this.startEnd(
         // When the command is initialized, set the wheels to the intake speed values
         () -> {
-          setFeedWheel(kIntakeFeederSpeed);
+          setFeedWheel(Constants.kIntakeFeederSpeed);
           setLaunchWheel(kIntakeLauncherSpeed);
         },
         // When the command stops, stop the wheels

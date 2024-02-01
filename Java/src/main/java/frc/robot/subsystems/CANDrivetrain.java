@@ -19,6 +19,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * that hardware is only being used by 1 command at a time.
  */
 public class CANDrivetrain extends SubsystemBase {
+  private static final double kGearRatio = 10.71 / 1;
+  private static final double kCountsPerMotorShaftRev = 12.0;
+  private static final double kCountsPerRevolution = kCountsPerMotorShaftRev * kGearRatio; // 585.0
+  private static final double kWheelDiameterInch = 6; // 60 mm
+
   /*Class member variables. These variables represent things the class needs to keep track of and use between
   different method calls. */
   DifferentialDrive m_drivetrain;
@@ -27,10 +32,10 @@ public class CANDrivetrain extends SubsystemBase {
    * member variables and perform any configuration or set up necessary on hardware.
    */
   public CANDrivetrain() {
-    CANSparkMax leftFront = new CANSparkMax(kLeftFrontID, MotorType.kBrushed);
-    CANSparkMax leftRear = new CANSparkMax(kLeftRearID, MotorType.kBrushed);
-    CANSparkMax rightFront = new CANSparkMax(kRightFrontID, MotorType.kBrushed);
-    CANSparkMax rightRear = new CANSparkMax(kRightRearID, MotorType.kBrushed);
+    CANSparkMax leftFront = new CANSparkMax(kLeftFrontID, MotorType.kBrushless);
+    CANSparkMax leftRear = new CANSparkMax(kLeftRearID, MotorType.kBrushless);
+    CANSparkMax rightFront = new CANSparkMax(kRightFrontID, MotorType.kBrushless);
+    CANSparkMax rightRear = new CANSparkMax(kRightRearID, MotorType.kBrushless);
 
     /*Sets current limits for the drivetrain motors. This helps reduce the likelihood of wheel spin, reduces motor heating
      *at stall (Drivetrain pushing against something) and helps maintain battery voltage under heavy demand */
@@ -56,6 +61,8 @@ public class CANDrivetrain extends SubsystemBase {
    * and a rotation about the Z (turning the robot about it's center) and uses these to control the drivetrain motors */
   public void arcadeDrive(double speed, double rotation) {
     m_drivetrain.arcadeDrive(speed, rotation);
+    if (Math.abs(speed) < 0.1) speed = 0;
+    if (Math.abs(rotation) < 0.1) rotation = 0;
   }
 
   @Override
